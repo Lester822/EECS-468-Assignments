@@ -1,0 +1,55 @@
+<!--
+ASSIGNMENT_NAME: EECS 468 Assignment 4
+FUNCTION: An HTML page with four tabs that slowly build the words "Rock Chalk Jayhawk - Go KU!"
+INPUTS: User clicks on the buttons
+OUTPUTS: Various text tabs
+AUTHOR_NAME: Michael Stang
+COLLABORATORS: eloquentjavascript.net
+CREATION_DATE: 02/26/24
+-->
+
+<!DOCTYPE html> <!--Declares this as a modern HTML document-->
+<html>  <!--The start of the HTML-->
+    <head> <!--The start of the header section of our HTML document-->
+        <meta charset="utf-8">  <!--Declares the character set being used as "utf-8"-->
+        <title>Stang's Go KU! Page</title>  <!--Sets the tab title as described in the instructions-->
+    </head>  <!--The end of the header section-->
+    <body>  <!--Start of body section-->
+        <tab-panel>  <!--Given tab panel that contains multiple tabs within-->
+            <div data-tabname="Rock">Rock ...</div>  <!--The first tab named "Rock"-->
+            <div data-tabname="Chalk">Rock Chalk ...</div>  <!--The second tab named "Chalk"-->
+            <div data-tabname="Jayhawk">Rock Chalk Jayhawk ...</div> <!--The third tab named "Jayhawk"-->
+            <div data-tabname="Go KU!">Rock Chalk Jayhawk - Go KU!</div>  <!--The fourth tab named "Go KU!"-->
+        </tab-panel> <!--The end of the tab collection and the end of the HTML for the body-->
+        <script>  // The start of the JS that controls the tabs
+            function asTabs(node) {  // A function that is called from below with the tab panel node being passed in
+              let tabs = Array.from(node.children).map(node => {  // Takes each subnode from the tab table and maps it to its associated elements as seen below
+                let button = document.createElement("button");  // Creates a new button 
+                button.textContent = node.getAttribute("data-tabname");  // Sets the text of the button to match the name of the tab it's being connected with
+                let tab = {node, button};  // Creates an object containing both the node and the button created from it
+                button.addEventListener("click", () => selectTab(tab));  // Adds an event when the button is clicked to run the "selectTab" function
+                return tab;  // Return the tab created into the "tabs" var
+              });
+          
+              let tabList = document.createElement("div");  // Creates a new div elemenent under the var "tabList"
+              for (let {button} of tabs) tabList.appendChild(button);  // Adds each button we made to the tabList div
+              node.insertBefore(tabList, node.firstChild);  // Puts the tab list above anything on the page by putting it at the start of the nodes
+          
+              function selectTab(selectedTab) {  // Function that handles what should happen when a button is pressed, passed in is the associated tab
+                for (let tab of tabs) {  // Goes through each tab/button on the page
+                  if (tab == selectedTab) {  // Checks if the selected tab is the current iteration's tab
+                        tab.node.style.display = "";  // If it is, enable it's display
+                        tab.button.style.color = "blue";  // Set it's color to blue
+                  } else {  // Otherwise,
+                        tab.node.style.display = "none";  // Hide it's display
+                        tab.button.style.color = "red";  // Set the color to red
+                  }
+                }
+              }
+              selectTab(tabs[0]);  // Sets the initial state of the tabs when the page is loaded
+            }
+          
+            asTabs(document.querySelector("tab-panel"));  // Calls asTabs with the tab panel as the given node
+        </script> <!--End of the script section-->
+    </body> <!--End of the body-->
+</html> <!--End of the HTML document-->

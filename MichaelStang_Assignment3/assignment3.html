@@ -1,0 +1,155 @@
+<!--
+ASSIGNMENT_NAME: EECS 468 Assignment 3
+FUNCTION: A basic HTML webpage that uses JS, specifically classes within JS, to output various text
+INPUTS: No user inputs
+OUTPUTS: Text on a basic webpage
+AUTHOR_NAME: Michael Stang
+COLLABORATORS: NONE
+CREATION_DATE: 02/11/24
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Assignment 3</title> 
+    </head>
+    <body>
+        <h1>EECS 468 Assignment 3</h1>
+        <h2>Contents of group1</h2>
+        <p id="a"></p>
+        <h2>Contents of group2</h2>
+        <p id="b"></p>
+        <h2>Results of group1.has(5)</h2>
+        <p id="c"></p>
+        <h2>Results of group2.has(3)</h2>
+        <p id="d"></p>
+        <h2>Results of group1.union(group2)</h2>
+        <p id="e"></p>
+        <h2>Results of group1.intersection(group2)</h2>
+        <p id="f"></p>
+        <h2>Results of group1.difference(group2)</h2>
+        <p id="g"></p>
+        <h2>Results of group1.delete(1)</h2>
+        <p id="h"></p>
+        <h2>Results of group2.delete(1)</h2>
+        <p id="i"></p>
+        
+        <script>
+            class Group {  // A class that will be our "set" replacement, named Group since set already exists.
+                constructor() {  // The consuctor that runs when the object is created
+                    this.values = [];  // A group contains one piece of data, and it's an Array of values within it
+                }
+                
+                has(value) {
+                    // A method that returns a boolean if the group contains the passed in value
+                    let is_in = false;  // Creates variable to hold boolean value, default is false until match is found
+                    for (let i = 0; i < this.values.length; i++) {  // Loops a number of times equal to the number of elements in the group
+                        if (this.values[i] == value) {  // If the item at the current iteration's index is a match to the passed in value...
+                            is_in = true;  // Sets tracker variable to true
+                            break;  // Breaks out of loop to save computation time
+                        }
+                    }
+                    return is_in;  // Returns the final value of is_in
+                }
+
+                delete(value) {
+                    // A method that removes a given value from a set if it's there
+                    for (let i = 0; i < this.values.length; i++) {  // Loops a number of times equal to the number of elements in the group
+                        if (this.values[i] == value) {  // If the item at the current iteraiton's index is a match to the passed in value
+                            this.values.splice(i, 1);  // Use "splice" method of arrays to remove 1 element at index i
+                            break;  // Breaks out of loop since sets can't have duplicates and to save computation time
+                        }
+                    }
+                }
+
+                add(value) {
+                    // A method to add a new value to the group
+                    if (!this.has(value)) {  // Checks if the passed in value is not already in the array using built in "has" method, if so...
+                        this.values.push(value);  // Adds the value to the end of the array (since sets are unordered, it doesn't matter)
+                    }
+                }
+                
+                union(other_group) {
+                    // A method that takes in another group and returns a new group that is the mathmatical union of both
+                    let new_group = new Group();  // A new group is created to be returned in the end
+                    for (let i = 0; i < this.values.length; i++) {  // Loops a number of times equal to THIS group's length
+                        new_group.add(this.values[i])  // Adds each element to the new group
+                    }
+                    for (let j = 0; j < other_group.values.length; j++) {  // Loops a number of times equal to the OTHER group's length
+                        new_group.add(other_group.values[j])  // Uses the "add" method to add more elements to the group, since the "add" method handles duplicates, we don't need to worry about it
+                    }
+                    return new_group;  // Returns our new group with all elements from either group
+                }
+
+                intersection(other_group){
+                    // A method that takes in another group and returns a new group that is the mathmatical intersection of both
+                    let new_group = new Group();  // A new group is created that will end up being returned
+                    for (let i = 0; i < this.values.length; i++) {  // Loops a number of times equal to this group's length
+                        if (other_group.has(this.values[i])) {  // If the passed in group contains the element at the current iteration's index within this group...
+                            new_group.add(this.values[i]);  // Add the element to our new group
+                        }
+                    }
+                    return new_group;  // Returns the new group with elements that are in both
+                }
+
+                difference(other_group){
+                    // A method that takes in another group and returns a new group that is the mathmatical difference between THIS and the passed in value (THIS - PASSED)
+                    let new_group = new Group();  // A new group that will hold the values in the this list, that aren't in the passed in one
+                    for (let i = 0; i < this.values.length; i++) {  // Loops a number of times equal to the number of elements in THIS group
+                        if (!other_group.has(this.values[i])) {  // If the passed in group does not contain the element at the current iteration's index within this group...
+                            new_group.add(this.values[i]);  // Adds the value to the new group
+                        }
+                    }
+                    return new_group;  // Returns the new group with elements that are in THIS group, but not the PASSED group
+                }
+
+                output() {
+                    // Helper function for debugging that returns the set in the format a, b, c, d, e
+                    let my_text = ""
+                    for (let i = 0; i < this.values.length; i++) {  // Loops a number of times equal to the number of elements in THIS group
+                        if (my_text == "") {  // If the string is empty
+                            my_text = this.values[i]  // Adds the first element to the string
+                        } else {  // If it's not the first element
+                            my_text = my_text + ", " + this.values[i]  // Adds the next element with a comma for formatting
+                        }
+                    }
+                    return my_text;  // Returns our sstring
+                }
+            }
+
+            function change_page(text, id) {
+                // Helper function that takes in an ID and text and updates text fields in HTML
+                let element = document.getElementById(id);  // Gets the element with the given ID
+                element.innerHTML = text;  // Actually updates the HTML of that element
+            }
+
+            // This section actually interacts with the class to answer the questions assigned:
+
+            let group1 = new Group();  // Creates a new group
+            let group2 = new Group();  // Creates a new group
+            group1.add(1);  // Adds 1 to the first group
+            group1.add(2);  // Adds 2 to the first group
+            group1.add(3);  // Adds 3 to the first group
+            group2.add(2);  // Adds 2 to the second group
+            group2.add(3);  // Adds 3 to the second group
+            group2.add(5);  // Adds 5 to the second group
+            group2.add(2);  // Adds 2 to the second group (or at least tries to)
+
+            change_page(group1.output(), "a");  // Sets the assoicated paragraph element to be the proper string
+            change_page(group2.output(), "b");  // Sets the assoicated paragraph element to be the proper string
+            change_page(group1.has(5), "c");  // Sets the assoicated paragraph element to be the proper string
+            change_page(group2.has(3), "d");  // Sets the assoicated paragraph element to be the proper string
+            change_page(group1.union(group2).output(), "e");  // Sets the assoicated paragraph element to be the proper string
+            change_page(group1.intersection(group2).output(), "f");  // Sets the assoicated paragraph element to be the proper string
+            change_page(group1.difference(group2).output(), "g");  // Sets the assoicated paragraph element to be the proper string
+            group1.delete(1);  // Deletes a 1 out of group 1
+            change_page(group1.output(), "h");  // Sets the assoicated paragraph element to be the proper string
+            group2.delete(1);  // Deletes a 1 out of group 2
+            change_page(group2.output(), "i");  // Sets the assoicated paragraph element to be the proper string
+
+
+       </script>
+
+    </body>
+</html>

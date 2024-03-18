@@ -1,0 +1,79 @@
+<!--
+ASSIGNMENT_NAME: EECS 468 Assignment 5
+FUNCTION: An HTML page that displays two pie charts with various labels for two data sets
+INPUTS: Two datasets
+OUTPUTS: Various pie charts
+AUTHOR_NAME: Michael Stang
+COLLABORATORS: eloquentjavascript.net
+CREATION_DATE: 03/16/24
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Assignment 5 Page</title>
+    </head>
+    <body>
+        <h1>Data Set 1</h1>
+        <canvas width="400" height="400" id="cnv1"></canvas>
+        <h1>Data Set 2</h1>
+        <canvas width="400" height="400" id="cnv2"></canvas>
+        
+        <script>
+            const results = [  // This is a list that contains the data for the first pie chart
+            {name: "Very happy", count: 63, color: "green"},  // Each entry is a specificf slice of the pie, they each have an associated name, count, and color
+            {name: "Happy", count: 104, color: "lightgreen"},  // This is the "happy" slice, with 104 count, and a light green color for the slice
+            {name: "Nuetral", count: 87, color: "gray"},  // Same but with "nuetral", 87, and gray
+            {name: "Unhappy", count: 51, color: "orange"},  // Same but with "unhappy", 51, and orange
+            {name: "Very unhappy", count: 26, color: "red"},  // Same but with "very unhappy", 26, and red
+            {name: "No comment", count: 18, color: "lightgray"}  // Same but with "no comment", 18, and light gray
+            ];
+
+            const results2 = [  // This is a list, similar to the one above, for the second pie chart
+            {name: "Satisfied", count: 213, color: "lightblue"},  // This the "satisified" slice, with a count of 213, and a light blue color
+            {name: "Neutral", count: 927, color: "lightgreen"},  // This is the "nuetral" slice with a count of 927 and a light green color
+            {name: "Unsatisfied", count: 463, color: "pink"},  // This is the "unsatisified" slice with a count of 463 and a pink color
+            {name: "No comment", count: 510, color: "silver"}  // This is the "no comment" slice with a count of 510 and a silver color
+            ]; 
+
+            let cx = document.getElementById("cnv1").getContext("2d");  // Variable used to add elements to the first canvas
+            let total = results.reduce((sum, {count}) => sum + count, 0);  // Total is used to store the total number of elements amongst all "counts" for all elements in the given dataset
+            let currentAngle = -0.5 * Math.PI;  // Sets the starting angle to -1/2pi
+            for (let result of results) {  // Goes through each slice in the dataset and draws them
+                let sliceAngle = (result.count / total) * 2 * Math.PI;  // Calculates the percent of the angle (of 2pi total) that the corrosponding slice has by taking its count over the total count. That gives a percent which is then multiplied by 2pi (which is the total of the angle of the circle)
+                cx.beginPath();  // Starts the path
+                cx.arc(200, 200, 100, currentAngle, currentAngle + sliceAngle);  // Draws an arc of with a radius of 100 that starts at 200,200 and goes from the current angle to the current angle plus the needed percentage for the current slice. This creates a slice with the correct length after the previous slice.
+                cx.lineTo(200, 200);  // Draws the line back to the center of the pie chart to create a full slice (and a complete shape)
+                cx.fillStyle = result.color;  // Sets the color to the color given in the dataset
+                cx.fill();  // Fills in the outline we drew and draws it to the canvas
+                cx.fillStyle = "black";  // Sets the fill style for our text to black
+                cx.textAlign = "center";  // Sets the allignement to be centered to make positioning even
+                let midAngle = currentAngle + (0.5 * sliceAngle);  // Calculates the angle of the middle of the current slice
+                let x_text = 130*Math.cos(midAngle) + 200;  // Uses basic trig to calculate the x and y compoenents of the mid-point angle to figure out text placement. It uses 130 to place the text outside of the pie chart instead of on the edge. That number can change to change distance from the chart
+                let y_text = 120*Math.sin(midAngle) + 200;  // Same as above but with a lower distance since text is written horizontally not veritcally
+                cx.fillText(result.name, x_text, y_text);  // Writes the text to the canvas
+                currentAngle += sliceAngle;  // Updates our current angle
+            }
+
+            let cx2 = document.getElementById("cnv2").getContext("2d");  // Variable used to add elements to the second canvas
+            let total2 = results2.reduce((sum, {count}) => sum + count, 0);  // Total is used to store the total number of elements amongst all "counts" for all elements in the given dataset
+            let currentAngle2 = -0.5 * Math.PI;  // Sets the starting angle to -1/2pi
+            for (let result of results2) {  // Goes through each slice in the dataset and draws them
+                let sliceAngle = (result.count / total2) * 2 * Math.PI;  // Calculates the percent of the angle (of 2pi total) that the corrosponding slice has by taking its count over the total count. That gives a percent which is then multiplied by 2pi (which is the total of the angle of the circle)
+                cx2.beginPath();  // Starts the path
+                cx2.arc(200, 200, 100, currentAngle2, currentAngle2 + sliceAngle); // Draws an arc of with a radius of 100 that starts at 200,200 and goes from the current angle to the current angle plus the needed percentage for the current slice. This creates a slice with the correct length after the previous slice.
+                cx2.lineTo(200, 200); // Draws the line back to the center of the pie chart to create a full slice (and a complete shape)
+                cx2.fillStyle = result.color; // Sets the color to the color given in the dataset
+                cx2.fill(); // Fills in the outline we drew and draws it to the canvas
+                cx2.fillStyle = "black"; // Sets the fill style for our text to black
+                cx2.textAlign = "center"; // Sets the allignement to be centered to make positioning even
+                let midAngle = currentAngle2 + (0.5 * sliceAngle); // Calculates the angle of the middle of the current slice
+                let x_text = 130*Math.cos(midAngle) + 200; // Uses basic trig to calculate the x and y compoenents of the mid-point angle to figure out text placement. It uses 130 to place the text outside of the pie chart instead of on the edge. That number can change to change distance from the chart
+                let y_text = 120*Math.sin(midAngle) + 200; // Same as above but with a lower distance since text is written horizontally not veritcally
+                cx2.fillText(result.name, x_text, y_text); // Writes the text to the canvas
+                currentAngle2 += sliceAngle; // Updates our current angle
+            }
+        </script>
+    </body>
+</html>

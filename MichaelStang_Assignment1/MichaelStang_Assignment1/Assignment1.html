@@ -1,0 +1,28 @@
+<!--
+ASSIGNMENT_NAME: EECS 468 Assignment 1
+FUNCTION: A basic HTML webpage that uses JS to make buttons
+INPUTS: User interaction (button presses)
+OUTPUTS: Basic webpage changes
+AUTHOR_NAME: Michael Stang
+COLLABORATORS: NONE
+CREATION_DATE: 01/23/2024
+-->
+
+<!DOCTYPE html>  <!--Declares the document as modern HTML.-->
+<html>  <!--This starts the HTML-->
+    <head>  <!--This starts the header-->
+        <meta charset="utf-8">  <!--This declares the character set-->
+        <title>Hello World!</title>  <!--Sets the tab title to "Hello World!"-->
+    </head>  <!--This ends the header-->
+    <body>  <!--This starts the body-->
+        <button onclick="alert('Hello World!');">Test 1 For Hello World!</button>  <!--A button element that triggers a JS alert with the text "Hello World"-->
+        <p id="helloworld"></p>  <!--An empty paragraph section with id "helloworld" to be filled in later-->
+        <button onclick="textAppear()">Test 2 For Hello World!</button>  <!--A button element that calls the textAppear() function that enables the text above-->
+        <script>  // Script section to hold function
+            function textAppear(){  // Function that makes text appear in id "helloworld"
+                var text = document.getElementById("helloworld");  // Gets the HTML element with ID "helloworld" and stores it as variable text
+                text.innerHTML = "Hello <br><br> World!"  // Sets the element at var text (which is the paragraph element)
+            }
+        </script>  <!--Ends the script section-->
+    </body>  <!--This ends the body-->
+</html>  <!--This ends the HTML-->

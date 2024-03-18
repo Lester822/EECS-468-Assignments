@@ -1,0 +1,71 @@
+<!--
+ASSIGNMENT_NAME: EECS 468 Assignment 2
+FUNCTION: A basic HTML webpage that displays the output to various JS problems
+INPUTS: None
+OUTPUTS: Text generated with JS
+AUTHOR_NAME: Michael Stang
+COLLABORATORS: NONE
+CREATION_DATE: 02/01/2024
+-->
+
+<!DOCTYPE html> <!--- Establishes the document as an HTML doc-->
+<head> <!--Sets header information including page title-->
+    <title>Assignment 2</title> <!--Sets page title to Assignment 2-->
+</head> <!--End of header section-->
+<body> <!--Start of body section-->
+    <h1>EECS 468 Assignment 2 - Michael Stang</h1>  <!--Top of page title-->
+    <h2>Part 2.1</h2>  <!--Section header for each question-->
+    <p id="p21"></p>  <!-- Place for question answer to be put with id so it can be easily changed by JS later-->
+    <h2>Part 2.2</h2>  <!--Section header for each question-->
+    <p id="p22"></p> <!-- Place for question answer to be put with id so it can be easily changed by JS later-->
+    <h2>Part 2.3</h2>  <!--Section header for each question-->
+    <p id="p23"></p>  <!-- Place for question answer to be put with id so it can be easily changed by JS later-->
+    <script>  // Start of JS code
+        function addText(change_id, text) {
+            // Function to add text to an HTML element that is passed in
+            document.getElementById(change_id).innerHTML = document.getElementById(change_id).innerHTML + text;  // Concatinates text to a current HTML element
+        }
+
+        // Start of Part 2.1
+        for (let i = 1; i <= 10; i += 1) {  // Loops 10 times holding the current iteration has 'i'
+            for (let j = 1; j <= i; j += 1) {  // Loops a number of times equal to the current iteration (so that each time it prints one more X)
+                addText("p21", "x");  // Uses "addText" function to add text to the HTML paragraph with ID p21
+            }
+            addText("p21", "<br>")  // Adds a new line after each row
+        }
+
+        // Start of Part 2.2
+        for (let i = 1; i <= 100; i += 1) { // Loops 100 times for nums 1 through 100
+            if (i % 4 == 0 && i % 7 == 0) {  // Checks if the current iteration is evenly divisible by 4 and 7
+                addText("p22", "Divisible by both 4 and 7<br>");  // Prints that
+            } else if (i % 4 == 0) {  // Checks if the current iteration is evenly divisible by 4
+                addText("p22", "Divisible by 4, but not 7<br>");  // Prints that
+            } else if (i % 7 == 0) {  // Checks if the current iteration is evenly divisible by 7
+                addText("p22", "Divisible by 7, but not 4<br>");  // Prints that
+            } else {  // If none of the above
+                addText("p22", i + "<br>");  // Just print the current num
+            }
+        }
+
+        // Start of Part 2.3
+        function n_by_n(size) {
+            // Print a grid with size "size'" Each slot is either a space or a "*"
+            for (let i = 0; i < size; i += 1) {  // Loops for each line
+                for (let j = 0; j < size; j += 1) {  // Loops for each position in each line
+                    if (j % 2 == 0) {  // The first and every odd value
+                        addText("p23", "&nbsp");  // Adds a space
+                    } else {  // If it's an even value
+                        addText("p23", "*");  // Adds a start
+                    }   
+                }
+                addText("p23", "<br>"); // Adds a newline after each row is complete
+            }
+        }
+        
+        for (let i = 8; i <= 14; i += 1) {  // Loops from 8 to 14
+            addText("p23", i + " by " + i + ":<br><br>");  // For each loop prints a title
+            n_by_n(i);  // Creates an i-by-i grid
+            addText("p23", "<br>");  // Prints a newline for formatting
+        }
+    </script>
+</body>
